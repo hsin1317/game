@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜拳遊戲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 1.2em;
+            margin: 10px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        .choice {
+            font-size: 2em;
+            margin: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>猜拳遊戲</h1>
+    <p>請選擇你的選項：</p>
+    <button onclick="playerChoice('rock')">石頭</button>
+    <button onclick="playerChoice('paper')">布</button>
+    <button onclick="playerChoice('scissors')">剪刀</button>
+
+    <div id="result"></div>
+    <div id="player-choice" class="choice"></div>
+    <div id="computer-choice" class="choice"></div>
+
+    <script>
+        function playerChoice(playerPick) {
+            // 顯示玩家選擇
+            document.getElementById('player-choice').textContent = "玩家選擇: " + playerPick;
+
+            // 隨機生成電腦選擇
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerPick = choices[Math.floor(Math.random() * choices.length)];
+
+            // 顯示電腦選擇
+            document.getElementById('computer-choice').textContent = "電腦選擇: " + computerPick;
+
+            // 比較玩家和電腦的選擇，並顯示結果
+            const result = determineWinner(playerPick, computerPick);
+            document.getElementById('result').textContent = result;
+        }
+
+        function determineWinner(playerPick, computerPick) {
+            // 判斷遊戲結果
+            if (playerPick === computerPick) {
+                return "平手！";
+            }
+            if (
+                (playerPick === 'rock' && computerPick === 'scissors') ||
+                (playerPick === 'paper' && computerPick === 'rock') ||
+                (playerPick === 'scissors' && computerPick === 'paper')
+            ) {
+                return "玩家贏了！";
+            } else {
+                return "電腦贏了！";
+            }
+        }
+    </script>
+</body>
+</html>

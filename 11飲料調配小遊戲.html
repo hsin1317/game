@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>飲料調配小遊戲</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .ingredients {
+            margin: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .selected-ingredients {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1.1em;
+        }
+        .selected-ingredients li {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>飲料調配小遊戲</h1>
+    <p>選擇材料來調配飲料，看看是否能成功！</p>
+
+    <p>目前需要調配的飲料：</p>
+    <p id="current-drink">選擇飲料</p>
+
+    <div class="ingredients">
+        <button onclick="addIngredient('茶')">茶</button>
+        <button onclick="addIngredient('牛奶')">牛奶</button>
+        <button onclick="addIngredient('蜂蜜')">蜂蜜</button>
+        <button onclick="addIngredient('檸檬')">檸檬</button>
+        <button onclick="addIngredient('橙汁')">橙汁</button>
+        <button onclick="addIngredient('冰塊')">冰塊</button>
+    </div>
+
+    <p>已選擇的材料：</p>
+    <ul id="selected-list" class="selected-ingredients"></ul>
+
+    <button onclick="checkDrink()">檢查飲料</button>
+    <div id="result"></div>
+
+    <script>
+        // 設定幾個飲料配方
+        const recipes = {
+            '蜂蜜茶': ['茶', '蜂蜜'],
+            '檸檬茶': ['茶', '檸檬'],
+            '橙汁冰飲': ['橙汁', '冰塊'],
+            '奶茶': ['茶', '牛奶'],
+        };
+
+        // 當前的飲料配方
+        let currentRecipe = '';
+        let selectedIngredients = [];
+
+        // 隨機選擇一個飲料配方
+        function setRandomRecipe() {
+            const recipeNames = Object.keys(recipes);
+            const randomRecipe = recipeNames[Math.floor(Math.random() * recipeNames.length)];
+            currentRecipe = randomRecipe;
+            document.getElementById('current-drink').textContent = `配方：${randomRecipe}`;
+        }
+
+        // 初始化隨機飲料配方
+        setRandomRecipe();
+
+        // 玩家選擇材料
+        function addIngredient(ingredient) {
+            selectedIngredients.push(ingredient);
+            displaySelectedIngredients();
+        }
+
+        // 顯示已選擇的材料
+        function displaySelectedIngredients() {
+            const selectedList = document.getElementById('selected-list');
+            selectedList.innerHTML = '';  // 清空列表
+            selectedIngredients.forEach(ingredient => {
+                const listItem = document.createElement('li');
+                listItem.textContent = ingredient;
+                selectedList.appendChild(listItem);
+            });
+        }
+
+        // 檢查飲料是否正確
+        function checkDrink() {
+            const resultDiv = document.getElementById('result');
+
+            if (selectedIngredients.length !== recipes[currentRecipe].length) {
+                resultDiv.textContent = "材料數量不對，請重新調配！";
+                resultDiv.style.color = "red";
+                return;
+            }
+
+            const isCorrect = selectedIngredients.every(ingredient => recipes[currentRecipe].includes(ingredient)) &&
+                              recipes[currentRecipe].every(ingredient => selectedIngredients.includes(ingredient));
+
+            if (isCorrect) {
+                resultDiv.textContent = `恭喜你，成功調配 ${currentRecipe}！`;
+                resultDiv.style.color = "green";
+            } else {
+                resultDiv.textContent = `哎呀，調配錯誤，再試試看！`;
+                resultDiv.style.color = "red";
+            }
+
+            // 重設選擇的材料，並隨機選擇下一個飲料
+            selectedIngredients = [];
+            displaySelectedIngredients();
+            setRandomRecipe();
+        }
+    </script>
+</body>
+</html>
